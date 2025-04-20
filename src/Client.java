@@ -7,13 +7,15 @@ public class Client {
 
     public static void main(String... args) {
 
+        String clientName = "Client of Rahul Krishna";
+
         // sentinel value
-        int userInput = -1;
+        int clientNumber = -1;
 
         // accept an integer input from the user
         System.out.print("Enter an integer from 1-100: ");
         Scanner scanner = new Scanner(System.in);
-        userInput = scanner.nextInt();
+        clientNumber = scanner.nextInt();
 
         try {
             // open a TCP socket
@@ -23,8 +25,7 @@ public class Client {
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
             // construct message to send
-            String clientName = "Client of Rahul Krishna";
-            String messageToSend = clientName + ";" + userInput;
+            String messageToSend = clientName + ";" + clientNumber;
             // send message to server
             dos.writeUTF(messageToSend);
 
@@ -36,18 +37,22 @@ public class Client {
             // [1] = selected integer
             String[] decoded = messageReceived.split(";");
 
+            System.out.println(clientName + " connected to " + decoded[0]);
+
             if(Integer.parseInt(decoded[1]) != -1) {
                 // display data and compute sum
-                System.out.println(clientName + " connected to " + decoded[0]);
                 System.out.println("Server's random integer: " + decoded[1]);
-                System.out.println("Client's selected integer: " + userInput);
+                System.out.println("Client's selected integer: " + clientNumber);
 
                 // compute and display the sum of server + client integer
-                System.out.println("The sum of the server and client integers is: " + (Integer.parseInt(decoded[1]) + userInput));
+                System.out.println("The sum of the server and client integers is: " + (Integer.parseInt(decoded[1]) + clientNumber));
             }
+
+            System.out.println("Closing connection with " + decoded[0]);
 
             // close socket
             socket.close();
+            System.out.println("Closing " + clientName);
             // fall off stack to terminate
         } catch(Exception e) {
             e.printStackTrace();
