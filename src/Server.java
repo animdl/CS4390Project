@@ -7,15 +7,21 @@ public class Server {
 
     public static void main(String... args) {
 
+        ServerSocket serverSocket = null;
+        Socket socket = null;
+
         try {
             // open a server on port 5001 and listen for client connections
-            ServerSocket serverSocket = new ServerSocket(5001);
-            Socket socket = serverSocket.accept();
+            serverSocket = new ServerSocket(5001);
 
-            DataInputStream dis = new DataInputStream(socket.getInputStream());
-            DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-
+            // continuously accept clients
             while(true) {
+                // blocking; listens for a client connection
+                socket = serverSocket.accept();
+
+                DataInputStream dis = new DataInputStream(socket.getInputStream());
+                DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+
                 // receive message from client
                 String messageReceived = dis.readUTF();
 
@@ -25,7 +31,9 @@ public class Server {
                 String[] decoded = messageReceived.split(";");
 
                 // terminate after receiving an integer value that is out of range
-                if(Integer.parseInt(decoded[1]) < 0 || Integer.parseInt(decoded[1]) > 100) {
+                if(Integer.parseInt(decoded[1]) < 1 || Integer.parseInt(decoded[1]) > 100) {
+                    // sends sentinel value to client to prompt socket closure
+                    dos.writeUTF(";-1");
                     break;
                 }
 
@@ -49,10 +57,13 @@ public class Server {
                 // send message to client
                 dos.writeUTF(messageToSend);
             }
-            // fall off stack
 
+            // close server and socket
+            serverSocket.close();
+            socket.close();
+            // fall off stack
         } catch(Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 
     }

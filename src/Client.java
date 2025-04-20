@@ -36,13 +36,15 @@ public class Client {
             // [1] = selected integer
             String[] decoded = messageReceived.split(";");
 
-            // display data and compute sum
-            System.out.println(clientName + " connected to " + decoded[0]);
-            System.out.println("Server's random integer: " + decoded[1]);
-            System.out.println("Client's selected integer: " + userInput);
+            if(Integer.parseInt(decoded[1]) != -1) {
+                // display data and compute sum
+                System.out.println(clientName + " connected to " + decoded[0]);
+                System.out.println("Server's random integer: " + decoded[1]);
+                System.out.println("Client's selected integer: " + userInput);
 
-            // compute and display the sum of server + client integer
-            System.out.println("The sum of the server and client integers is: " + (Integer.parseInt(decoded[1]) + userInput));
+                // compute and display the sum of server + client integer
+                System.out.println("The sum of the server and client integers is: " + (Integer.parseInt(decoded[1]) + userInput));
+            }
 
             // close socket
             socket.close();
