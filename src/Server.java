@@ -33,10 +33,13 @@ public class Server {
                 String serverName = "Server of Rahul Krishna";
                 System.out.println(decoded[0] + " connected to " + serverName);
 
+                // display clients number
+                System.out.println("Client's selected integer: " + decoded[1]);
+
                 // generate random integer between 1-100
                 int randomNumber = (int) ((Math.random() * 99) + 1);
                 // display random integer
-                System.out.println("Server selected random integer: " + randomNumber);
+                System.out.println("Server's random integer: " + randomNumber);
 
                 // compute and display the sum of server + client integer
                 System.out.println("The sum of the server and client integers is: " + (Integer.parseInt(decoded[1]) + randomNumber));

@@ -10,16 +10,10 @@ public class Client {
         // sentinel value
         int userInput = -1;
 
-        Scanner scanner;
-
         // accept an integer input from the user
-        // validate that the integer is within the bounds of 1-100
-        while(userInput < 0 || userInput > 100) {
-            System.out.print("Enter an integer from 1-100: ");
-
-            scanner = new Scanner(System.in);
-            userInput = scanner.nextInt();
-        }
+        System.out.print("Enter an integer from 1-100: ");
+        Scanner scanner = new Scanner(System.in);
+        userInput = scanner.nextInt();
 
         try {
             // open a TCP socket
@@ -29,16 +23,26 @@ public class Client {
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
             // construct message to send
-            String messageToSend = "Client of Rahul Krishna;" + userInput;
-            // send message
+            String clientName = "Client of Rahul Krishna";
+            String messageToSend = clientName + ";" + userInput;
+            // send message to server
             dos.writeUTF(messageToSend);
 
             // receive message from server
-            // TODO
-            // String messageReceived = dis.readUTF();
+            String messageReceived = dis.readUTF();
+
+            // decode message
+            // [0] = name of server
+            // [1] = selected integer
+            String[] decoded = messageReceived.split(";");
 
             // display data and compute sum
-            // TODO
+            System.out.println(clientName + " connected to " + decoded[0]);
+            System.out.println("Server's random integer: " + decoded[1]);
+            System.out.println("Client's selected integer: " + userInput);
+
+            // compute and display the sum of server + client integer
+            System.out.println("The sum of the server and client integers is: " + (Integer.parseInt(decoded[1]) + userInput));
 
             // close socket
             socket.close();
