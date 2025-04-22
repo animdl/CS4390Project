@@ -8,6 +8,7 @@ public class Client {
     public static void main(String... args) {
 
         String clientName = "Client of Rahul Krishna";
+        String host = "192.168.0.220";
 
         // sentinel value
         int clientNumber = -1;
@@ -19,36 +20,33 @@ public class Client {
 
         try {
             // open a TCP socket
-            Socket socket = new Socket("127.0.0.1", 5001);
+            Socket socket = new Socket(host, 5001);
 
             DataInputStream dis = new DataInputStream(socket.getInputStream());
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
-            // construct message to send
-            String messageToSend = clientName + ";" + clientNumber;
-            // send message to server
-            dos.writeUTF(messageToSend);
+            // send clientName to server
+            dos.writeUTF(clientName);
+            // send clientNumber to server
+            dos.writeUTF("" + clientNumber);
 
-            // receive message from server
-            String messageReceived = dis.readUTF();
+            // receive serverName from server
+            String serverName = dis.readUTF();
+            // receive serverNumber from server
+            int serverNumber = Integer.parseInt(dis.readUTF());
 
-            // decode message
-            // [0] = name of server
-            // [1] = selected integer
-            String[] decoded = messageReceived.split(";");
+            System.out.println(clientName + " connected to " + serverName + " on host " + host + " port 5001");
 
-            System.out.println(clientName + " connected to " + decoded[0]);
-
-            if(Integer.parseInt(decoded[1]) != -1) {
+            if(serverNumber != -1) {
                 // display data and compute sum
-                System.out.println("Server's random integer: " + decoded[1]);
+                System.out.println("Server's random integer: " + serverNumber);
                 System.out.println("Client's selected integer: " + clientNumber);
 
                 // compute and display the sum of server + client integer
-                System.out.println("The sum of the server and client integers is: " + (Integer.parseInt(decoded[1]) + clientNumber));
+                System.out.println("The sum of the server and client integers is: " + (serverNumber + clientNumber));
             }
 
-            System.out.println("Closing connection with " + decoded[0]);
+            System.out.println("Closing connection with " + serverName);
 
             // close socket
             socket.close();
