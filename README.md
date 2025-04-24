@@ -60,4 +60,4 @@ The client accepts an integer input from the user, connects to a server running 
 - Cleanup
   - The client prints a disconnection message and terminates gracefully.
 
-![image](https://github.com/user-attachments/assets/b7bd45ad-f383-4079-b047-f6a6f7191076)
+![image](https://github.com/user-attachments/assets/3ca60b47-b834-4c9c-9d9b-0ea3c11a4283)
