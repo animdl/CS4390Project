@@ -35,7 +35,7 @@ public class Client {
             // receive serverNumber from server
             int serverNumber = Integer.parseInt(dis.readUTF());
 
-            System.out.println(clientName + " connected to " + serverName + " on host " + host + " port 5001");
+            System.out.println("---\n" + clientName + " connected to " + serverName + " on host " + host + " port 5001");
 
             if(serverNumber != -1) {
                 // display data and compute sum
@@ -50,7 +50,7 @@ public class Client {
 
             // close socket
             socket.close();
-            System.out.println("Closing " + clientName);
+            System.out.println("Closing " + clientName + "\n---");
             // fall off stack to terminate
         } catch(Exception e) {
             e.printStackTrace();
