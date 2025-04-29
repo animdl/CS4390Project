@@ -16,6 +16,8 @@ public class Server {
             // open a server on port 5001 and listen for client connections
             serverSocket = new ServerSocket(5001);
 
+            System.out.println("Server started on port 5001");
+
             boolean flag = true;
 
             // continuously accept clients
@@ -28,24 +30,20 @@ public class Server {
                 DataInputStream dis = new DataInputStream(socket.getInputStream());
                 DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
-                // receive message from client
-                String messageReceived = dis.readUTF();
-
-                // decode message
-                // [0] = name of client
-                // [1] = selected integer
-                String[] decoded = messageReceived.split(";");
+                // receive clientName from client
+                String clientName = dis.readUTF();
+                // receive clientNumber from client
+                int clientNumber = Integer.parseInt(dis.readUTF());
 
                 // display client and server name
-                System.out.println(decoded[0] + " connected to " + serverName);
-
+                System.out.println(clientName + " connected to " + serverName);
                 // display clients number
-                System.out.println("Client's selected integer: " + decoded[1]);
+                System.out.println("Client's selected integer: " + clientNumber);
 
                 int serverNumber;
 
                 // terminate after receiving an integer value that is out of range
-                if(Integer.parseInt(decoded[1]) < 1 || Integer.parseInt(decoded[1]) > 100) {
+                if(clientNumber < 1 || clientNumber > 100) {
                     // sets sentinel value to prompt socket closure
                     serverNumber = -1;
                     flag = false;
@@ -56,15 +54,15 @@ public class Server {
                     System.out.println("Server's random integer: " + serverNumber);
 
                     // compute and display the sum of server + client integer
-                    System.out.println("The sum of the server and client integers is: " + (Integer.parseInt(decoded[1]) + serverNumber));
+                    System.out.println("The sum of the server and client integers is: " + (clientNumber + serverNumber));
                 }
 
-                // construct message to send
-                String messageToSend = serverName + ";" + serverNumber;
-                // send message to client
-                dos.writeUTF(messageToSend);
+                // send serverName to client
+                dos.writeUTF(serverName);
+                // send serverNumber to client
+                dos.writeUTF("" + serverNumber);
 
-                System.out.println("Closing connection with " + decoded[0]);
+                System.out.println("Closing connection with " + clientName);
             }
 
             // close server and socket
